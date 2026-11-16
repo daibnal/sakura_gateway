@@ -1,0 +1,56 @@
+spring:
+  application:
+    name: gateway
+  cloud:
+    gateway:
+      server:
+        webflux:
+          # El navegador del HTML llama a este puerto. Las apps de negocio no se exponen.
+          globalcors:
+            cors-configurations:
+              '[/**]':
+                allowedOrigins: "*"
+                allowedMethods:
+                  - GET
+                  - POST
+                  - PUT
+                  - DELETE
+                  - OPTIONS
+                allowedHeaders: "*"
+            add-to-simple-url-handler-mapping: true
+          routes:
+            - id: sakura_personas
+              uri: http://localhost:8081
+              predicates:
+                - Path=/api/v1/auth/**,/api/v1/usuarios/**
+            - id: sakura_catalogo
+              uri: http://localhost:8089
+              predicates:
+                - Path=/api/v1/categorias/**,/api/v1/servicios/**
+            - id: sakura_personal
+              uri: http://localhost:8083
+              predicates:
+                - Path=/api/v1/profesionales/**
+            - id: sakura_agenda
+              uri: http://localhost:8084
+              predicates:
+                - Path=/api/v1/reservas/**
+            - id: sakura_pago
+              uri: http://localhost:8085
+              predicates:
+                - Path=/api/v1/pagos/**
+            - id: sakura_inventario
+              uri: http://localhost:8086
+              predicates:
+                - Path=/api/v1/insumos/**
+            - id: sakura_reporte
+              uri: http://localhost:8087
+              predicates:
+                - Path=/api/v1/reportes/**,/api/v1/gastos/**
+            - id: sakura_configuracion
+              uri: http://localhost:8088
+              predicates:
+                - Path=/api/v1/configuracion/**
+
+server:
+  port: 8090
